@@ -1,0 +1,14 @@
+long contador = 0;
+double total = 12.5;
+read contador;
+
+while (contador < 10) {
+    write total;
+    contador++;
+
+    if (contador == 5) {
+        continue;
+    } else {
+        total += contador;
+    }
+}
