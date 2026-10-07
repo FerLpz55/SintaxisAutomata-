@@ -83,9 +83,9 @@ public final class VentanaCompilador extends JFrame {
         try {
             ResultadoCompilacion resultado = new Compilador().compilar(editor.getText());
             for (Token token : resultado.getTokens()) {
-                if (token.getTipo() != TokenType.EOF) {
+                if (token.getTipoToken() != TokenType.EOF) {
                     modeloTokens.addRow(new Object[] {
-                            token.getTipo(), token.getLexema(), token.getLinea(), token.getColumna()
+                            token.getTipoToken(), token.getLexema(), token.getLinea(), token.getColumna()
                     });
                 }
             }
