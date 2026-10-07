@@ -1,0 +1,4 @@
+long x = 3
+if (x) {
+    write x;
+}
