@@ -5,6 +5,19 @@ public final class Pruebas {
     }
 
     public static void main(String[] args) {
+        Token token = new Token("edad", 1, 6);
+        token.setTipo("IDENTIFICADOR");
+        token.setToken("contador");
+        token.setIndiceFila(2);
+        token.setIndiceComienzo(4);
+        if (!token.getToken().equals("contador")
+                || !token.getTipo().equals("IDENTIFICADOR")
+                || token.getTipoToken() != TokenType.IDENTIFICADOR
+                || token.getLinea() != 2 || token.getColumna() != 4
+                || !token.getLexema().equals("contador")) {
+            throw new AssertionError("Los metodos de Token deben compartir los mismos datos");
+        }
+
         debeAceptar("programa basico", """
                 long a = 1;
                 double b = 2.5;
