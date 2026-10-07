@@ -47,6 +47,19 @@ public final class Pruebas {
                 }
                 """);
 
+        debeAceptar("division compuesta", "long a = 10; a /= 2;");
+        debeAceptar("bloques de if y else dentro de while", """
+                while (a == 1) {
+                    if (a != 2) {
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                """);
+        debeAceptar("while vacio", "while (a < 2) {}");
+        debeRechazar("while sin llave de cierre", "while (a < 2) {");
+        debeRechazar("else de bucle sin cierre", "while (a < 2) { if (a == 1) {} else {");
         debeRechazar("break fuera de while", "break;");
         debeRechazar("falta punto y coma", "long x = 3");
         debeRechazar("condicion sin comparador", "if (x) write x;");
