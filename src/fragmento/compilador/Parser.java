@@ -213,7 +213,7 @@ public final class Parser {
     }
 
     private boolean inicioOracion() {
-        return INICIO_ORACION.contains(actual().getTipo());
+        return INICIO_ORACION.contains(actual().getTipoToken());
     }
 
     private boolean inicioControl() {
@@ -237,7 +237,7 @@ public final class Parser {
     }
 
     private boolean ver(TokenType tipo) {
-        return actual().getTipo() == tipo;
+        return actual().getTipoToken() == tipo;
     }
 
     private Token actual() {
