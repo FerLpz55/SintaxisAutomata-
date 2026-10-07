@@ -1,36 +1,72 @@
 package fragmento.compilador;
 
 public final class Token {
-    private final TokenType tipo;
-    private final String lexema;
-    private final int linea;
-    private final int columna;
+    private String tipo;
+    private String token;
+    private int indiceFila;
+    private int indiceComienzo;
 
-    public Token(TokenType tipo, String lexema, int linea, int columna) {
-        this.tipo = tipo;
-        this.lexema = lexema;
-        this.linea = linea;
-        this.columna = columna;
+    public Token(String token, int indiceFila, int indiceComienzo) {
+        this.token = token;
+        this.indiceFila = indiceFila;
+        this.indiceComienzo = indiceComienzo;
     }
 
-    public TokenType getTipo() {
+    public Token(TokenType tipo, String lexema, int linea, int columna) {
+        this(lexema, linea, columna);
+        this.tipo = tipo.name();
+    }
+
+    public String getTipo() {
         return tipo;
     }
 
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public TokenType getTipoToken() {
+        return TokenType.valueOf(tipo);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public int getIndiceFila() {
+        return indiceFila;
+    }
+
+    public void setIndiceFila(int indiceFila) {
+        this.indiceFila = indiceFila;
+    }
+
+    public int getIndiceComienzo() {
+        return indiceComienzo;
+    }
+
+    public void setIndiceComienzo(int indiceComienzo) {
+        this.indiceComienzo = indiceComienzo;
+    }
+
     public String getLexema() {
-        return lexema;
+        return getToken();
     }
 
     public int getLinea() {
-        return linea;
+        return getIndiceFila();
     }
 
     public int getColumna() {
-        return columna;
+        return getIndiceComienzo();
     }
 
     @Override
     public String toString() {
-        return tipo + "('" + lexema + "') [" + linea + ":" + columna + "]";
+        return tipo + "('" + token + "') [" + indiceFila + ":" + indiceComienzo + "]";
     }
 }
