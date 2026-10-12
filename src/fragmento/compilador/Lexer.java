@@ -27,7 +27,7 @@ public final class Lexer {
                 leerSimbolo();
             }
         }
-        tokens.add(new Token(TokenType.EOF, "", linea, columna));
+        tokens.add(new Token(Tokens.EOT, "", linea, columna));
         return tokens;
     }
 
@@ -44,18 +44,18 @@ public final class Lexer {
         tokens.add(new Token(palabraReservada(lexema), lexema, lineaInicio, columnaInicio));
     }
 
-    private TokenType palabraReservada(String lexema) {
+    private Tokens palabraReservada(String lexema) {
         return switch (lexema) {
-            case "long" -> TokenType.LONG;
-            case "double" -> TokenType.DOUBLE;
-            case "if" -> TokenType.IF;
-            case "else" -> TokenType.ELSE;
-            case "while" -> TokenType.WHILE;
-            case "break" -> TokenType.BREAK;
-            case "continue" -> TokenType.CONTINUE;
-            case "read" -> TokenType.READ;
-            case "write" -> TokenType.WRITE;
-            default -> TokenType.IDENTIFICADOR;
+            case "long" -> Tokens.LONG;
+            case "double" -> Tokens.DOUBLE;
+            case "if" -> Tokens.IF;
+            case "else" -> Tokens.ELSE;
+            case "while" -> Tokens.WHILE;
+            case "break" -> Tokens.BREAK;
+            case "continue" -> Tokens.CONTINUE;
+            case "read" -> Tokens.READ;
+            case "write" -> Tokens.WRITE;
+            default -> Tokens.IDENTIFICADOR;
         };
     }
 
@@ -84,7 +84,7 @@ public final class Lexer {
         }
 
         String lexema = fuente.substring(inicio, indice);
-        tokens.add(new Token(esDouble ? TokenType.NUMERO_DOUBLE : TokenType.NUMERO_LONG, lexema, lineaInicio, columnaInicio));
+        tokens.add(new Token(esDouble ? Tokens.NUMERO_DOUBLE : Tokens.NUMERO_LONG, lexema, lineaInicio, columnaInicio));
     }
 
     private void leerSimbolo() {
@@ -114,19 +114,19 @@ public final class Lexer {
             throw new CompilacionException("Lexico", "comentario sin cerrar", lineaInicio, columnaInicio);
         }
 
-        TokenType tipo = switch (String.valueOf(actual) + siguiente) {
-            case "!=" -> TokenType.DISTINTO;
-            case "==" -> TokenType.IGUAL;
-            case "-=" -> TokenType.MENOSNUMERO;
-            case "<=" -> TokenType.MENORIGUAL;
-            case "+=" -> TokenType.MASNUMERO;
-            case ">=" -> TokenType.MAYORIGUAL;
-            case "++" -> TokenType.MASUNO;
-            case "--" -> TokenType.MENOSUNO;
-            case "/=" -> TokenType.DIVIDIDONUMERO;
-            case "*=" -> TokenType.PORNUMERO;
-            case "&&" -> TokenType.AND;
-            case "||" -> TokenType.OR;
+        Tokens tipo = switch (String.valueOf(actual) + siguiente) {
+            case "!=" -> Tokens.DISTINTO;
+            case "==" -> Tokens.IGUAL;
+            case "-=" -> Tokens.MENOSNUMERO;
+            case "<=" -> Tokens.MENORIGUAL;
+            case "+=" -> Tokens.MASNUMERO;
+            case ">=" -> Tokens.MAYORIGUAL;
+            case "++" -> Tokens.MASUNO;
+            case "--" -> Tokens.MENOSUNO;
+            case "/=" -> Tokens.DIVIDIDONUMERO;
+            case "*=" -> Tokens.PORNUMERO;
+            case "&&" -> Tokens.AND;
+            case "||" -> Tokens.OR;
             default -> null;
         };
         if (tipo != null) {
@@ -137,19 +137,19 @@ public final class Lexer {
         }
 
         tipo = switch (actual) {
-            case '=' -> TokenType.ASIGNADOR;
-            case '/' -> TokenType.DIVISION;
-            case '*' -> TokenType.POR;
-            case '+' -> TokenType.MAS;
-            case '-' -> TokenType.MENOS;
-            case '>' -> TokenType.MAYOR;
-            case '<' -> TokenType.MENOR;
-            case '(' -> TokenType.PARIZQ;
-            case ')' -> TokenType.PARDER;
-            case '{' -> TokenType.LLAVEIZQ;
-            case '}' -> TokenType.LLAVEDER;
-            case ';' -> TokenType.PYCOMA;
-            case ',' -> TokenType.COMA;
+            case '=' -> Tokens.ASIGNADOR;
+            case '/' -> Tokens.DIVISION;
+            case '*' -> Tokens.POR;
+            case '+' -> Tokens.MAS;
+            case '-' -> Tokens.MENOS;
+            case '>' -> Tokens.MAYOR;
+            case '<' -> Tokens.MENOR;
+            case '(' -> Tokens.PARIZQ;
+            case ')' -> Tokens.PARDER;
+            case '{' -> Tokens.LLAVEIZQ;
+            case '}' -> Tokens.LLAVEDER;
+            case ';' -> Tokens.PYCOMA;
+            case ',' -> Tokens.COMA;
             default -> null;
         };
 

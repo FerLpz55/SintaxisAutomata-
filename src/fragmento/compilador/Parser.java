@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 public final class Parser {
-    private static final Set<TokenType> INICIO_ORACION = EnumSet.of(
-            TokenType.LONG, TokenType.DOUBLE, TokenType.IDENTIFICADOR,
-            TokenType.READ, TokenType.WRITE, TokenType.PYCOMA);
+    private static final Set<Tokens> INICIO_ORACION = EnumSet.of(
+            Tokens.LONG, Tokens.DOUBLE, Tokens.IDENTIFICADOR,
+            Tokens.READ, Tokens.WRITE, Tokens.PYCOMA);
 
     private final List<Token> tokens;
     private int posicion;
@@ -18,16 +18,16 @@ public final class Parser {
 
     public void analizar() {
         secuencia(false);
-        esperar(TokenType.EOF, "se esperaba fin del programa");
+        esperar(Tokens.EOT, "se esperaba fin del programa");
     }
 
     private void secuencia(boolean dentroBucle) {
-        while (!ver(TokenType.EOF) && !ver(TokenType.LLAVEDER) && !ver(TokenType.ELSE)) {
+        while (!ver(Tokens.EOT) && !ver(Tokens.LLAVEDER) && !ver(Tokens.ELSE)) {
             if (inicioOracion()) {
                 oracion();
-            } else if (ver(TokenType.IF)) {
+            } else if (ver(Tokens.IF)) {
                 si(dentroBucle);
-            } else if (ver(TokenType.WHILE)) {
+            } else if (ver(Tokens.WHILE)) {
                 mientras();
             } else if (dentroBucle && inicioControl()) {
                 control();
@@ -38,21 +38,21 @@ public final class Parser {
     }
 
     private void oracion() {
-        if (aceptar(TokenType.PYCOMA)) {
+        if (aceptar(Tokens.PYCOMA)) {
             return;
         }
         instruccion();
-        esperar(TokenType.PYCOMA, "falta ';' al final de la oracion");
+        esperar(Tokens.PYCOMA, "falta ';' al final de la oracion");
     }
 
     private void instruccion() {
-        if (ver(TokenType.LONG) || ver(TokenType.DOUBLE)) {
+        if (ver(Tokens.LONG) || ver(Tokens.DOUBLE)) {
             declaracion();
-        } else if (ver(TokenType.IDENTIFICADOR)) {
+        } else if (ver(Tokens.IDENTIFICADOR)) {
             asignacion();
-        } else if (ver(TokenType.READ)) {
+        } else if (ver(Tokens.READ)) {
             leer();
-        } else if (ver(TokenType.WRITE)) {
+        } else if (ver(Tokens.WRITE)) {
             escribir();
         } else {
             error("se esperaba declaracion, asignacion, read o write");
@@ -61,22 +61,22 @@ public final class Parser {
 
     private void declaracion() {
         tipo();
-        esperar(TokenType.IDENTIFICADOR, "se esperaba identificador en declaracion");
-        if (aceptar(TokenType.ASIGNADOR)) {
+        esperar(Tokens.IDENTIFICADOR, "se esperaba identificador en declaracion");
+        if (aceptar(Tokens.ASIGNADOR)) {
             termino();
         } else {
-            while (aceptar(TokenType.COMA)) {
-                esperar(TokenType.IDENTIFICADOR, "se esperaba identificador despues de ','");
+            while (aceptar(Tokens.COMA)) {
+                esperar(Tokens.IDENTIFICADOR, "se esperaba identificador despues de ','");
             }
         }
     }
 
     private void asignacion() {
-        esperar(TokenType.IDENTIFICADOR, "se esperaba identificador");
-        if (aceptar(TokenType.ASIGNADOR, TokenType.MENOSNUMERO, TokenType.MASNUMERO,
-                TokenType.PORNUMERO, TokenType.DIVIDIDONUMERO)) {
+        esperar(Tokens.IDENTIFICADOR, "se esperaba identificador");
+        if (aceptar(Tokens.ASIGNADOR, Tokens.MENOSNUMERO, Tokens.MASNUMERO,
+                Tokens.PORNUMERO, Tokens.DIVIDIDONUMERO)) {
             termino();
-        } else if (aceptar(TokenType.MASUNO, TokenType.MENOSUNO)) {
+        } else if (aceptar(Tokens.MASUNO, Tokens.MENOSUNO)) {
             return;
         } else {
             error("se esperaba operador de asignacion");
@@ -84,18 +84,18 @@ public final class Parser {
     }
 
     private void si(boolean dentroBucle) {
-        esperar(TokenType.IF, "se esperaba if");
+        esperar(Tokens.IF, "se esperaba if");
         condicionEntreParentesis();
         cuerpoIf(dentroBucle);
-        if (aceptar(TokenType.ELSE)) {
+        if (aceptar(Tokens.ELSE)) {
             cuerpoElse(dentroBucle);
         }
     }
 
     private void cuerpoIf(boolean dentroBucle) {
-        if (aceptar(TokenType.LLAVEIZQ)) {
+        if (aceptar(Tokens.LLAVEIZQ)) {
             secuencia(dentroBucle);
-            esperar(TokenType.LLAVEDER, "falta '}' para cerrar el if");
+            esperar(Tokens.LLAVEDER, "falta '}' para cerrar el if");
         } else if (dentroBucle && inicioControl()) {
             control();
         } else {
@@ -104,9 +104,9 @@ public final class Parser {
     }
 
     private void cuerpoElse(boolean dentroBucle) {
-        if (aceptar(TokenType.LLAVEIZQ)) {
+        if (aceptar(Tokens.LLAVEIZQ)) {
             secuencia(dentroBucle);
-            esperar(TokenType.LLAVEDER, "falta '}' para cerrar el else");
+            esperar(Tokens.LLAVEDER, "falta '}' para cerrar el else");
         } else if (dentroBucle && inicioControl()) {
             control();
         } else {
@@ -115,11 +115,11 @@ public final class Parser {
     }
 
     private void mientras() {
-        esperar(TokenType.WHILE, "se esperaba while");
+        esperar(Tokens.WHILE, "se esperaba while");
         condicionEntreParentesis();
-        if (aceptar(TokenType.LLAVEIZQ)) {
+        if (aceptar(Tokens.LLAVEIZQ)) {
             secuencia(true);
-            esperar(TokenType.LLAVEDER, "falta '}' para cerrar el while");
+            esperar(Tokens.LLAVEDER, "falta '}' para cerrar el while");
         } else if (inicioControl()) {
             control();
         } else {
@@ -128,28 +128,28 @@ public final class Parser {
     }
 
     private void control() {
-        if (aceptar(TokenType.BREAK, TokenType.CONTINUE)) {
-            esperar(TokenType.PYCOMA, "falta ';' despues del control de bucle");
+        if (aceptar(Tokens.BREAK, Tokens.CONTINUE)) {
+            esperar(Tokens.PYCOMA, "falta ';' despues del control de bucle");
             return;
         }
         error("se esperaba break o continue");
     }
 
     private void condicionEntreParentesis() {
-        esperar(TokenType.PARIZQ, "falta '(' antes de la condicion");
+        esperar(Tokens.PARIZQ, "falta '(' antes de la condicion");
         condicion();
-        esperar(TokenType.PARDER, "falta ')' despues de la condicion");
+        esperar(Tokens.PARDER, "falta ')' despues de la condicion");
     }
 
     private void condicion() {
         condicionSimple();
-        while (aceptar(TokenType.AND, TokenType.OR)) {
+        while (aceptar(Tokens.AND, Tokens.OR)) {
             condicionSimple();
         }
     }
 
     private void condicionSimple() {
-        if (ver(TokenType.PARIZQ)) {
+        if (ver(Tokens.PARIZQ)) {
             int marca = posicion;
             try {
                 termino();
@@ -159,9 +159,9 @@ public final class Parser {
             } catch (CompilacionException ex) {
                 posicion = marca;
             }
-            esperar(TokenType.PARIZQ, "falta '('");
+            esperar(Tokens.PARIZQ, "falta '('");
             condicion();
-            esperar(TokenType.PARDER, "falta ')' para cerrar condicion agrupada");
+            esperar(Tokens.PARDER, "falta ')' para cerrar condicion agrupada");
             return;
         }
 
@@ -171,44 +171,44 @@ public final class Parser {
     }
 
     private void termino() {
-        if (aceptar(TokenType.PARIZQ)) {
+        if (aceptar(Tokens.PARIZQ)) {
             termino();
-            esperar(TokenType.PARDER, "falta ')' para cerrar termino");
+            esperar(Tokens.PARDER, "falta ')' para cerrar termino");
             return;
         }
         operando();
-        if (aceptar(TokenType.MAS, TokenType.MENOS, TokenType.POR, TokenType.DIVISION)) {
+        if (aceptar(Tokens.MAS, Tokens.MENOS, Tokens.POR, Tokens.DIVISION)) {
             termino();
         }
     }
 
     private void operando() {
-        if (aceptar(TokenType.NUMERO_DOUBLE, TokenType.NUMERO_LONG, TokenType.IDENTIFICADOR)) {
+        if (aceptar(Tokens.NUMERO_DOUBLE, Tokens.NUMERO_LONG, Tokens.IDENTIFICADOR)) {
             return;
         }
         error("se esperaba numero o identificador");
     }
 
     private void comparador() {
-        if (!aceptar(TokenType.IGUAL, TokenType.DISTINTO, TokenType.MAYORIGUAL,
-                TokenType.MENORIGUAL, TokenType.MAYOR, TokenType.MENOR)) {
+        if (!aceptar(Tokens.IGUAL, Tokens.DISTINTO, Tokens.MAYORIGUAL,
+                Tokens.MENORIGUAL, Tokens.MAYOR, Tokens.MENOR)) {
             error("se esperaba comparador");
         }
     }
 
     private void tipo() {
-        if (!aceptar(TokenType.DOUBLE, TokenType.LONG)) {
+        if (!aceptar(Tokens.DOUBLE, Tokens.LONG)) {
             error("se esperaba tipo long o double");
         }
     }
 
     private void leer() {
-        esperar(TokenType.READ, "se esperaba read");
-        esperar(TokenType.IDENTIFICADOR, "read necesita un identificador");
+        esperar(Tokens.READ, "se esperaba read");
+        esperar(Tokens.IDENTIFICADOR, "read necesita un identificador");
     }
 
     private void escribir() {
-        esperar(TokenType.WRITE, "se esperaba write");
+        esperar(Tokens.WRITE, "se esperaba write");
         termino();
     }
 
@@ -217,11 +217,11 @@ public final class Parser {
     }
 
     private boolean inicioControl() {
-        return ver(TokenType.BREAK) || ver(TokenType.CONTINUE);
+        return ver(Tokens.BREAK) || ver(Tokens.CONTINUE);
     }
 
-    private boolean aceptar(TokenType... tipos) {
-        for (TokenType tipo : tipos) {
+    private boolean aceptar(Tokens... tipos) {
+        for (Tokens tipo : tipos) {
             if (ver(tipo)) {
                 posicion++;
                 return true;
@@ -230,13 +230,13 @@ public final class Parser {
         return false;
     }
 
-    private void esperar(TokenType tipo, String mensaje) {
+    private void esperar(Tokens tipo, String mensaje) {
         if (!aceptar(tipo)) {
             error(mensaje + ". Token actual: " + actual().getLexema());
         }
     }
 
-    private boolean ver(TokenType tipo) {
+    private boolean ver(Tokens tipo) {
         return actual().getTipoToken() == tipo;
     }
 
