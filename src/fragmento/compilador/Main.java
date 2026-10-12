@@ -32,5 +32,7 @@ public final class Main {
                 .filter(token -> token.getTipoToken() != TokenType.EOT)
                 .forEach(System.out::println);
         System.out.println(resultado.getMensaje());
+        System.out.println("Arbol sintactico:");
+        System.out.println(resultado.getArbol());
     }
 }

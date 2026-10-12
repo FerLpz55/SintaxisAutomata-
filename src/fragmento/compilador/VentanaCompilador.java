@@ -19,12 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 public final class VentanaCompilador extends JFrame {
     private final JTextArea editor = new JTextArea();
+    private final JTextArea salidaArbol = new JTextArea();
     private final DefaultTableModel modeloTokens = new DefaultTableModel(
             new Object[] { "Tipo", "Lexema", "Linea", "Columna" }, 0);
     private final JLabel estado = new JLabel("Listo");
@@ -66,8 +68,14 @@ public final class VentanaCompilador extends JFrame {
         JTable tablaTokens = new JTable(modeloTokens);
         tablaTokens.setFillsViewportHeight(true);
 
+        salidaArbol.setEditable(false);
+        salidaArbol.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
+        JTabbedPane resultados = new JTabbedPane();
+        resultados.addTab("Tokens", new JScrollPane(tablaTokens));
+        resultados.addTab("Arbol sintactico", new JScrollPane(salidaArbol));
+
         JSplitPane division = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                new JScrollPane(editor), new JScrollPane(tablaTokens));
+                new JScrollPane(editor), resultados);
         division.setResizeWeight(0.62);
 
         estado.setHorizontalAlignment(SwingConstants.LEFT);
@@ -80,6 +88,7 @@ public final class VentanaCompilador extends JFrame {
 
     private void analizar() {
         modeloTokens.setRowCount(0);
+        salidaArbol.setText("");
         try {
             ResultadoCompilacion resultado = new Compilador().compilar(editor.getText());
             for (Token token : resultado.getTokens()) {
@@ -89,7 +98,9 @@ public final class VentanaCompilador extends JFrame {
                     });
                 }
             }
-            estado.setText(resultado.getMensaje() + ". TokenType: " + modeloTokens.getRowCount());
+            salidaArbol.setText(resultado.getArbol().toString());
+            salidaArbol.setCaretPosition(0);
+            estado.setText(resultado.getMensaje() + ". Tokens: " + modeloTokens.getRowCount());
         } catch (CompilacionException ex) {
             estado.setText(ex.getMessage());
         }

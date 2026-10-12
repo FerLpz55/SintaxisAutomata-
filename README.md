@@ -6,6 +6,7 @@ El programa implementa:
 
 - Analizador lexico con los tokens del PDF.
 - Analizador sintactico basado en la gramatica de `src/fragmento/compilador/sintaxis.txt`.
+- Arbol sintactico basado en las clases del material del profesor, con recorridos y consultas de nodos.
 - Interfaz Swing para escribir o abrir codigo, analizarlo y ver la tabla de tokens.
 - Modo consola para analizar archivos `.lang`.
 - Pruebas basicas sin dependencias externas.
@@ -52,6 +53,9 @@ Con JDK instalado:
 java -jar dist/CompiladorLenguaje.jar examples/valido.lang
 ```
 
+El modo consola muestra los tokens, el resultado del analisis y el arbol sintactico.
+En Swing, el arbol se muestra en la pestana `Arbol sintactico` al analizar.
+
 En Windows:
 
 ```bat
@@ -64,8 +68,11 @@ java -jar dist\CompiladorLenguaje.jar examples\valido.lang
 - `src/fragmento/compilador/sintaxis.txt`: gramatica tomada del PDF.
 - `src/fragmento/compilador/Lexer.java`: crea tokens.
 - `src/fragmento/compilador/Parser.java`: valida la sintaxis.
+- `src/fragmento/compilador/ArbolSintactico.java`: construye y consulta el arbol.
+- `src/fragmento/compilador/NodoSintactico.java`: representa terminales y no terminales.
 - `src/fragmento/compilador/VentanaCompilador.java`: interfaz grafica.
 - `test/fragmento/compilador/Pruebas.java`: pruebas ejecutables.
+- `test/fragmento/compilador/PruebasArbol.java`: comprueba 36 programas y las consultas del arbol.
 
 ## Alcance
 

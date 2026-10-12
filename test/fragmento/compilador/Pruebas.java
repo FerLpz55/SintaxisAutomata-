@@ -64,6 +64,7 @@ public final class Pruebas {
         debeRechazar("falta punto y coma", "long x = 3");
         debeRechazar("condicion sin comparador", "if (x) write x;");
 
+        PruebasArbol.main(new String[0]);
         System.out.println("Todas las pruebas pasaron");
     }
 

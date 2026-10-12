@@ -1,5 +1,6 @@
 package fragmento.compilador;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,8 @@ public final class Parser {
 
     private final List<Token> tokens;
     private int posicion;
+    private int nivelSecuencia;
+    private final ArbolSintactico arbol = new ArbolSintactico();
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
@@ -21,8 +24,14 @@ public final class Parser {
         esperar(TokenType.EOT, "se esperaba fin del programa");
     }
 
+    public ArbolSintactico getArbol() {
+        return arbol;
+    }
+
     private void secuencia(boolean dentroBucle) {
+        boolean principal = nivelSecuencia++ == 0;
         while (!ver(TokenType.EOT) && !ver(TokenType.LLAVEDER) && !ver(TokenType.ELSE)) {
+            int inicio = posicion;
             if (inicioOracion()) {
                 oracion();
             } else if (ver(TokenType.IF)) {
@@ -34,7 +43,11 @@ public final class Parser {
             } else {
                 error("se esperaba una oracion, if o while");
             }
+            if (principal) {
+                arbol.agregarTerminales(new ArrayList<>(tokens.subList(inicio, posicion)));
+            }
         }
+        nivelSecuencia--;
     }
 
     private void oracion() {
