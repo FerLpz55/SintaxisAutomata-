@@ -2,12 +2,6 @@ package fragmento.compilador;
 
 import java.util.ArrayList;
 
-/**
- * Arbol sintactico basado en el material de clase de ArbolSintactico.java.
- * Conserva los nodos y metodos del ejemplo; corrige el encadenamiento de
- * instrucciones, parentesis, comparaciones y busqueda de profundidad.
- * Los terminales deben corresponder a instrucciones completas ya validadas.
- */
 public class ArbolSintactico {
     private final NodoSintactico raiz;
 
@@ -15,7 +9,6 @@ public class ArbolSintactico {
         raiz = new NodoSintactico("SECUENCIA");
     }
 
-    /** Agrega una instruccion completa; el parser ya debe haber validado sus terminales. */
     public void agregarTerminales(ArrayList<Token> terminales) {
         NodoSintactico sub_raiz = buscarSecuenciaSinDerivados();
         switch (terminales.get(0).getTipo()) {
@@ -354,7 +347,6 @@ public class ArbolSintactico {
     {
         return raiz;
     }
-    /** Representa las ramas con el formato de niveles del material de clase. */
     @Override
     public String toString() {
         String texto = subToString(raiz, 0);
@@ -543,7 +535,6 @@ public class ArbolSintactico {
         return retorno;
     }
 
-    /** Encadena cada instruccion una sola vez, conservando SECUENCIA y BLOQUEBUCLE. */
     private void agregarListaInstrucciones(NodoSintactico subraiz, ArrayList<Token> terminales, boolean dentroBucle) {
         NodoSintactico actual = subraiz;
         int inicio = 0;
@@ -577,7 +568,6 @@ public class ArbolSintactico {
         }
     }
 
-    /** Devuelve el limite exclusivo, incluyendo el else que corresponda al if. */
     private int buscarFinInstruccion(ArrayList<Token> terminales, int inicio) {
         String tipo = terminales.get(inicio).getTipo();
         if (tipo.equals("IF") || tipo.equals("WHILE")) {
