@@ -12,7 +12,7 @@ public final class Pruebas {
         token.setIndiceComienzo(4);
         if (!token.getToken().equals("contador")
                 || !token.getTipo().equals("IDENTIFICADOR")
-                || token.getTipoToken() != Tokens.IDENTIFICADOR
+                || token.getTipoToken() != TokenType.IDENTIFICADOR
                 || token.getLinea() != 2 || token.getColumna() != 4
                 || !token.getLexema().equals("contador")) {
             throw new AssertionError("Los metodos de Token deben compartir los mismos datos");

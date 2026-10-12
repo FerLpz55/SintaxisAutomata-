@@ -29,7 +29,7 @@ public final class Main {
         String fuente = Files.readString(Path.of(ruta), StandardCharsets.UTF_8);
         ResultadoCompilacion resultado = new Compilador().compilar(fuente);
         resultado.getTokens().stream()
-                .filter(token -> token.getTipoToken() != Tokens.EOT)
+                .filter(token -> token.getTipoToken() != TokenType.EOT)
                 .forEach(System.out::println);
         System.out.println(resultado.getMensaje());
     }

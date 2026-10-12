@@ -12,7 +12,7 @@ public class Token {
         this.token = token;
     }
 
-    public Token(Tokens tipo, String lexema, int linea, int columna) {
+    public Token(TokenType tipo, String lexema, int linea, int columna) {
         this(lexema, linea, columna);
         this.tipo = tipo.name();
     }
@@ -36,8 +36,8 @@ public class Token {
         this.tipo = tipo;
     }
 
-    public Tokens getTipoToken() {
-        return Tokens.valueOf(tipo);
+    public TokenType getTipoToken() {
+        return TokenType.valueOf(tipo);
     }
 
     /**

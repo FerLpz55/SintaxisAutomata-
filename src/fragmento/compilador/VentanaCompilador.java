@@ -83,13 +83,13 @@ public final class VentanaCompilador extends JFrame {
         try {
             ResultadoCompilacion resultado = new Compilador().compilar(editor.getText());
             for (Token token : resultado.getTokens()) {
-                if (token.getTipoToken() != Tokens.EOT) {
+                if (token.getTipoToken() != TokenType.EOT) {
                     modeloTokens.addRow(new Object[] {
                             token.getTipoToken(), token.getLexema(), token.getLinea(), token.getColumna()
                     });
                 }
             }
-            estado.setText(resultado.getMensaje() + ". Tokens: " + modeloTokens.getRowCount());
+            estado.setText(resultado.getMensaje() + ". TokenType: " + modeloTokens.getRowCount());
         } catch (CompilacionException ex) {
             estado.setText(ex.getMessage());
         }
