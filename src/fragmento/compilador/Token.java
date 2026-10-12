@@ -1,15 +1,15 @@
 package fragmento.compilador;
 
-public final class Token {
-    private String tipo;
-    private String token;
+public class Token {
     private int indiceFila;
     private int indiceComienzo;
+    private String token;
+    private String tipo;
 
     public Token(String token, int indiceFila, int indiceComienzo) {
-        this.token = token;
         this.indiceFila = indiceFila;
         this.indiceComienzo = indiceComienzo;
+        this.token = token;
     }
 
     public Token(TokenType tipo, String lexema, int linea, int columna) {
@@ -17,10 +17,21 @@ public final class Token {
         this.tipo = tipo.name();
     }
 
+    /**
+     * Regresa el tipo de token terminal: IDENTIFICADOR, NUMERO_LONG,
+     * NUMERO_DOUBLE, IF, ELSE, entre otros.
+     *
+     * @return tipo del token
+     */
     public String getTipo() {
         return tipo;
     }
 
+    /**
+     * Define el tipo de token terminal.
+     *
+     * @param tipo nombre del tipo de token
+     */
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -29,10 +40,21 @@ public final class Token {
         return TokenType.valueOf(tipo);
     }
 
+    /**
+     * Devuelve el texto concreto del token, por ejemplo: if, else, while,
+     * ++, double, 3.14 o un identificador.
+     *
+     * @return texto del token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * Establece el texto concreto del token.
+     *
+     * @param token texto del token
+     */
     public void setToken(String token) {
         this.token = token;
     }
